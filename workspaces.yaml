@@ -1,0 +1,126 @@
+# =============================================================================
+# Kitty Workspace Menu Configuration
+# =============================================================================
+#
+# This file configures the workspace launcher menu for Claude Code sessions.
+# Used by: ~/.config/kitty/scripts/workspace-menu.sh
+#
+# STRUCTURE:
+#   repo_roots   - Base directory paths (supports $HOME expansion)
+#   colors       - Terminal color schemes per workspace (keyed by lowercase workspace name)
+#   workspaces   - Workspace definitions with optional modules and modes
+#
+# WORKSPACE TYPES:
+#   Simple:  No modules array -> launches directly to root_ref directory
+#   Modular: Has modules + modes arrays -> nested menu navigation
+#
+# MODE IDs:
+#   PLAN_DESIGN - Opens claude for planning/design work
+#   IMPLEMENT   - Prompts for PRD ID, then opens claude
+#   (custom)    - Any other mode_id launches with mode in title
+#
+# =============================================================================
+
+repo_roots:
+  galt: "$HOME/Documents/code/GaltIot"
+  ssdd: "$HOME/Documents/ssdd"
+
+colors:
+  # Colors keyed by lowercase workspace key
+  galt:
+    background: "#0b0e11"
+    foreground: "#e5e7eb"
+    cursor: "#9ca3af"
+  ssdd:
+    background: "#2b1f16"
+    foreground: "#f5f5f4"
+    cursor: "#facc15"
+
+workspaces:
+  # ---------------------------------------------------------------------------
+  # GALT - Modular workspace with submodule navigation
+  # ---------------------------------------------------------------------------
+  - key: "GALT"
+    title_base: "GALT"
+    root_ref: "galt"
+
+    # Modules - subdirectories within the root
+    modules:
+      - key: "root"
+        path: "."
+        display_name: "Root Repository"
+      - key: "greengrass-components"
+        path: "greengrass-components"
+        display_name: "Greengrass Components"
+      - key: "mobile-app"
+        path: "mobile-app"
+        display_name: "Mobile App"
+      - key: "aws-infrastructure"
+        path: "aws-infrastructure"
+        display_name: "AWS Infrastructure"
+      - key: "viso"
+        path: "viso"
+        display_name: "Viso Pi TV"
+      - key: "jack"
+        path: "jack"
+        display_name: "Jack ESP32"
+      - key: "imagebuild"
+        path: "imagebuild"
+        display_name: "Image Build"
+      - key: "ios-monitor"
+        path: "mobile-app"
+        display_name: "iOS Monitor"
+        action: "flutter run"
+      - key: "serial-monitor"
+        path: "jack/jack-core"
+        display_name: "Serial Monitor"
+        action: "pio device monitor"
+      - key: "rpc-json"
+        path: "."
+        display_name: "RPC JSON"
+        action: "rpc-menu"
+
+    # Modes - what type of work session
+    modes:
+      - key: "PLAN / DESIGN"
+        mode_id: "PLAN_DESIGN"
+        description: "Architecture and design planning"
+      - key: "IMPLEMENT"
+        mode_id: "IMPLEMENT"
+        description: "Implementation with PRD tracking"
+
+  # ---------------------------------------------------------------------------
+  # SSDD - Simple workspace (no modules, launches directly)
+  # ---------------------------------------------------------------------------
+  - key: "SSDD"
+    title_base: "SSDD – Client"
+    root_ref: "ssdd"
+    # No modules = simple workspace, launches directly to root
+
+# =============================================================================
+# EXTENDING THIS CONFIG
+# =============================================================================
+#
+# To add a new simple workspace:
+#   - key: "NEWPROJECT"
+#     title_base: "New Project"
+#     root_ref: "newproject"
+#
+#   Then add to repo_roots:
+#     newproject: "$HOME/path/to/project"
+#
+#   And colors:
+#     newproject:
+#       background: "#..."
+#       foreground: "#..."
+#       cursor: "#..."
+#
+# To add a new modular workspace, include modules and modes arrays.
+#
+# To add a new mode:
+#   modes:
+#     - key: "DEBUG"
+#       mode_id: "DEBUG"
+#       description: "Debugging session"
+#
+# =============================================================================
