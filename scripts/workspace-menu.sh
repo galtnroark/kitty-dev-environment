@@ -587,15 +587,18 @@ handle_modular_workspace() {
           while true; do
             header "Enter PRD ID ($ws_key → $module → Implement)"
 
-            # Show recent PRDs if available
+            # Show recent PRDs if available and get default value
             local recent
             recent="$(get_recent_prds "$module")"
+            local default_prd=""
             if [[ -n "$recent" ]]; then
               gum style --faint "Recent: $(echo "$recent" | tr '\n' ' ')"
+              # Use the most recent PRD as the default input value
+              default_prd="$(echo "$recent" | head -1)"
             fi
 
             local prd
-            prd="$(gum input --placeholder "PRD ID (e.g. GG-SENSOR-2025-001)" --width 50)"
+            prd="$(gum input --placeholder "PRD ID (e.g. GG-SENSOR-2025-001)" --value "$default_prd" --width 50)"
 
             # Handle cancel or empty (go back)
             [[ -z "$prd" ]] && break
